@@ -1,0 +1,552 @@
+<!doctype html>
+<html lang="es" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Maestría en Educación – Universidad Juan de Castellanos</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+
+    :root {
+      --teal: #016e7c;
+      --teal-dark: #014d57;
+      --teal-light: #0fa3c1;
+      --gold: #f0c060;
+      --gold-glow: rgba(240, 192, 96, 0.45);
+      --white: #ffffff;
+      --text-muted: rgba(255,255,255,0.55);
+      --card-bg: rgba(255,255,255,0.06);
+      --card-border: rgba(255,255,255,0.12);
+    }
+
+    html, body {
+      margin: 0; padding: 0; height: 100%;
+      background: var(--teal-dark);
+      font-family: 'Playfair Display', Georgia, serif;
+      color: #fff;
+    }
+
+    /* ── SCROLLBAR ── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--teal-dark); }
+    ::-webkit-scrollbar-thumb { background: var(--teal-light); border-radius: 3px; }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky; top: 0; z-index: 50;
+      background: rgba(1, 77, 87, 0.85);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      padding: 0.75rem 1.5rem;
+    }
+    nav .inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
+    nav a { color: rgba(255,255,255,0.75); text-decoration: none; font-size: 0.875rem; font-weight: 500; transition: color 0.2s; }
+    nav a:hover { color: var(--gold); }
+    nav .links { display: flex; gap: 1.5rem; }
+
+    /* ── HERO ── */
+    .hero {
+      background: linear-gradient(160deg, var(--teal-dark) 0%, var(--teal) 60%, #015a65 100%);
+      padding: 5rem 1.5rem 6rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -80px; right: -80px;
+      width: 400px; height: 400px;
+      border-radius: 50%;
+      border: 2px solid rgba(240,192,96,0.08);
+      pointer-events: none;
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -60px; left: -60px;
+      width: 300px; height: 300px;
+      border-radius: 50%;
+      border: 1px solid rgba(15,163,193,0.12);
+      pointer-events: none;
+    }
+    .hero-inner { position: relative; z-index: 2; max-width: 780px; margin: 0 auto; }
+    .gold-bar { width: 56px; height: 3px; background: linear-gradient(90deg, var(--gold), rgba(240,192,96,0.3)); margin: 0 auto 1.5rem; border-radius: 2px; }
+    .hero h1 { font-size: clamp(2.2rem, 5vw, 3.8rem); font-weight: 800; line-height: 1.15; margin-bottom: 0.75rem; letter-spacing: -0.5px; }
+    .hero .tagline { font-family: 'Playfair Display', serif; font-size: clamp(1rem, 2.5vw, 1.5rem); font-weight: 500; font-style: italic; letter-spacing: 0.08em; color: rgba(255,255,255,0.7); margin-bottom: 2.5rem; }
+    .hero-buttons { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+
+    /* ── BUTTONS ── */
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.75rem 1.75rem;
+      font-family: 'Playfair Display', serif;
+      font-size: 0.875rem; font-weight: 600;
+      border-radius: 8px;
+      background: var(--gold);
+      color: var(--teal-dark);
+      border: none; cursor: pointer; text-decoration: none;
+      transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+      box-shadow: 0 0 0 rgba(240,192,96,0);
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 22px var(--gold-glow), 0 4px 16px rgba(0,0,0,0.25);
+      background: #f5cc74;
+    }
+
+    .btn-outline {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.75rem 1.75rem;
+      font-family: 'Playfair Display', serif;
+      font-size: 0.875rem; font-weight: 600;
+      border-radius: 8px;
+      background: transparent;
+      color: #fff;
+      border: 2px solid rgba(255,255,255,0.3);
+      cursor: pointer; text-decoration: none;
+      transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s, background 0.2s;
+    }
+    .btn-outline:hover {
+      transform: translateY(-2px);
+      border-color: var(--teal-light);
+      background: rgba(15,163,193,0.12);
+      box-shadow: 0 0 18px rgba(15,163,193,0.3);
+    }
+
+    /* ── SECTION WRAPPER ── */
+    .section { padding: 4rem 1.5rem; }
+    .section-inner { max-width: 1100px; margin: 0 auto; }
+    .section-header { text-align: center; margin-bottom: 2.5rem; }
+    .section-header h2 { font-size: clamp(1.6rem, 3vw, 2.2rem); font-weight: 700; margin-bottom: 0.4rem; }
+    .section-header p { color: var(--text-muted); font-size: 0.95rem; font-style: italic; }
+
+    /* ── SERVICE CARDS ── */
+    .cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+
+    .service-card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 2rem;
+      display: flex; flex-direction: column;
+      transition: transform 0.3s, box-shadow 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+    .service-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0;
+      width: 100%; height: 4px;
+      background: linear-gradient(90deg, var(--teal), var(--teal-light));
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .service-card:hover { transform: translateY(-6px); box-shadow: 0 20px 48px rgba(1,77,87,0.18); }
+    .service-card:hover::before { opacity: 1; }
+
+    .card-icon {
+      width: 52px; height: 52px;
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 1.25rem;
+      background: linear-gradient(135deg, var(--teal), var(--teal-light));
+      box-shadow: 0 4px 14px rgba(1,110,124,0.35);
+      flex-shrink: 0;
+    }
+    .card-icon svg { color: #fff !important; width: 24px; height: 24px; }
+
+    .service-card h3 { font-size: 1.15rem; font-weight: 700; color: var(--teal-dark); margin-bottom: 0.5rem; }
+    .service-card p { font-size: 0.875rem; color: #4a6370; line-height: 1.65; margin-bottom: 0.4rem; flex-grow: 1; }
+    .service-card .badge { font-size: 0.72rem; color: #8aabb5; font-style: italic; margin-bottom: 1rem; }
+
+    .card-link {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      font-size: 0.85rem; font-weight: 700;
+      color: var(--teal);
+      text-decoration: none;
+      border-radius: 6px;
+      padding: 0.5rem 1rem;
+      background: rgba(1,110,124,0.07);
+      border: 1px solid rgba(1,110,124,0.18);
+      transition: background 0.2s, box-shadow 0.2s, transform 0.2s, color 0.2s;
+      margin-top: auto;
+      align-self: flex-start;
+    }
+    .card-link:hover {
+      background: var(--teal);
+      color: #fff;
+      box-shadow: 0 0 16px rgba(1,110,124,0.4);
+      transform: translateX(3px);
+    }
+    .card-link-row { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: auto; }
+
+    .copy-btn {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      font-size: 0.85rem; font-weight: 600;
+      color: var(--teal);
+      background: none; border: 1px dashed rgba(1,110,124,0.3);
+      border-radius: 6px; padding: 0.45rem 0.9rem;
+      cursor: pointer;
+      font-family: 'Playfair Display', serif;
+      transition: border-color 0.2s, background 0.2s, color 0.2s;
+    }
+    .copy-btn:hover { background: var(--teal-light); color: #fff; border-color: transparent; }
+
+    /* ── NEWS / EVENTS ── */
+    .news-section { background: rgba(255,255,255,0.03); border-top: 1px solid var(--card-border); border-bottom: 1px solid var(--card-border); }
+    .news-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 1.25rem; }
+    .news-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 1.5rem;
+      transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
+      cursor: default;
+    }
+    .news-card:hover { transform: translateY(-4px); border-color: rgba(15,163,193,0.35); box-shadow: 0 12px 32px rgba(0,0,0,0.25); }
+    .news-tag {
+      display: inline-block;
+      font-size: 0.7rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+      padding: 0.25rem 0.7rem; border-radius: 999px;
+      margin-bottom: 0.75rem;
+    }
+    .tag-evento { background: rgba(240,192,96,0.15); color: var(--gold); }
+    .tag-noticia { background: rgba(15,163,193,0.15); color: var(--teal-light); }
+    .tag-aviso { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.7); }
+    .news-card h4 { font-size: 1rem; font-weight: 700; margin-bottom: 0.4rem; line-height: 1.4; }
+    .news-card p { font-size: 0.82rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 0.75rem; }
+    .news-card .news-date { font-size: 0.72rem; color: rgba(255,255,255,0.35); font-style: italic; }
+    .news-card .news-link { font-size: 0.8rem; color: var(--teal-light); text-decoration: none; display: inline-flex; align-items: center; gap: 0.3rem; }
+    .news-card .news-link:hover { color: var(--gold); }
+
+
+
+    /* ── DIRECTORY ── */
+    .dir-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; }
+    .dir-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 1.25rem 1.5rem;
+      transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+    }
+    .dir-card:hover { transform: translateY(-3px); border-color: rgba(240,192,96,0.3); box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
+    .dir-icon {
+      width: 42px; height: 42px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 0.9rem;
+      background: linear-gradient(135deg, rgba(240,192,96,0.2), rgba(240,192,96,0.05));
+      border: 1px solid rgba(240,192,96,0.2);
+    }
+    .dir-icon svg { color: var(--gold) !important; width: 20px; height: 20px; }
+    .dir-card .dept { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.4rem; }
+    .dir-card .name { font-size: 0.88rem; font-weight: 600; color: #fff; margin-bottom: 0.35rem; }
+    .dir-card a { font-size: 0.82rem; color: var(--teal-light); text-decoration: none; display: flex; align-items: center; gap: 0.3rem; transition: color 0.2s; }
+    .dir-card a:hover { color: var(--gold); }
+
+    /* ── CONTACT ── */
+    .contact-wrap {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 3rem;
+      position: relative; overflow: hidden;
+    }
+    .contact-wrap::before {
+      content: '';
+      position: absolute; top: -80px; right: -80px;
+      width: 260px; height: 260px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(240,192,96,0.06), transparent 70%);
+    }
+    .contact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; }
+    .contact-item { display: flex; align-items: flex-start; gap: 1rem; }
+    .contact-icon {
+      width: 42px; height: 42px; border-radius: 10px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(15,163,193,0.15);
+      border: 1px solid rgba(15,163,193,0.25);
+    }
+    .contact-icon svg { color: var(--teal-light) !important; width: 18px; height: 18px; }
+    .contact-item .label { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 0.25rem; }
+    .contact-item a, .contact-item span { font-size: 0.88rem; font-weight: 500; color: #fff; text-decoration: none; transition: color 0.2s; }
+    .contact-item a:hover { color: var(--gold); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: rgba(0,0,0,0.2);
+      border-top: 1px solid rgba(255,255,255,0.06);
+      text-align: center;
+      padding: 2rem 1.5rem;
+    }
+    footer .ft { font-size: 0.82rem; font-weight: 600; margin-bottom: 0.3rem; }
+    footer .ft-sub { font-size: 0.72rem; color: var(--text-muted); line-height: 1.6; }
+    footer .ft-copy { font-size: 0.68rem; color: rgba(255,255,255,0.2); margin-top: 0.75rem; }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .fade-up { animation: fadeUp 0.6s ease forwards; opacity: 0; }
+    .d1 { animation-delay: 0.05s; }
+    .d2 { animation-delay: 0.15s; }
+    .d3 { animation-delay: 0.25s; }
+    .d4 { animation-delay: 0.35s; }
+
+    @media (max-width: 640px) {
+      .form-row { grid-template-columns: 1fr; }
+      .contact-wrap { padding: 1.75rem; }
+      nav .links { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="inner">
+    <img src="https://www.jdc.edu.co/images/Menu%20Principal/horizontal-fondo-oscuro.png"
+         alt="Universidad Juan de Castellanos"
+         style="height:48px; width:auto;"
+         onerror="this.style.display='none'">
+    <div class="links">
+      <a href="#servicios">Servicios</a>
+      <a href="#noticias">Noticias</a>
+      <a href="#directorio">Directorio</a>
+      <a href="#contacto">Contacto</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-inner fade-up d1">
+    <div class="gold-bar"></div>
+    <h1>Maestría en Educación</h1>
+    <p class="tagline">SOMOS + SOMOS LA JUAN</p>
+    <div class="hero-buttons">
+      <a href="#servicios" class="btn-primary">
+        <i data-lucide="layout-grid" style="width:16px;height:16px;"></i> Explorar Servicios
+      </a>
+      <a href="#contacto" class="btn-outline">
+        <i data-lucide="mail" style="width:16px;height:16px;"></i> Contacto
+      </a>
+    </div>
+  </div>
+</header>
+
+<!-- SERVICIOS -->
+<section id="servicios" class="section" style="background: linear-gradient(180deg, var(--teal-dark) 0%, var(--teal) 100%);">
+  <div class="section-inner">
+    <div class="section-header fade-up d1">
+      <div class="gold-bar"></div>
+      <h2>Servicios Académicos</h2>
+      <p>Accede a las herramientas del programa con un solo clic</p>
+    </div>
+    <div class="cards-grid">
+
+      <!-- 1. CRONOGRAMA ACADÉMICO -->
+      <div class="service-card fade-up d1">
+        <div class="card-icon">
+          <i data-lucide="calendar-days"></i>
+        </div>
+        <h3>Cronograma Académico</h3>
+        <p>Fechas clave del semestre: inicio de clases, parciales, sustentaciones y ceremonias de grado.</p>
+        <p class="badge">Acceso con cuenta institucional</p>
+        <div class="card-link-row">
+          <a class="card-link"
+             href="https://script.google.com/a/macros/jdc.edu.co/s/AKfycbwSSDSNykGBCNvGRYIblEqX1tSWeRBBFeyRccc3xDfQboge0VM8L4RSQIYgl8Jq9ilr/exec"
+             target="_blank" rel="noopener noreferrer">
+            <i data-lucide="external-link" style="width:14px;height:14px;"></i> Acceder
+          </a>
+          <button class="copy-btn" onclick="
+            navigator.clipboard.writeText('https://script.google.com/a/macros/jdc.edu.co/s/AKfycbwSSDSNykGBCNvGRYIblEqX1tSWeRBBFeyRccc3xDfQboge0VM8L4RSQIYgl8Jq9ilr/exec');
+            this.textContent='¡Copiado!';
+            setTimeout(() => { this.innerHTML='<i data-lucide=\'copy\' style=\'width:13px;height:13px;display:inline\'></i> Copiar link'; lucide.createIcons(); }, 2000);">
+            <i data-lucide="copy" style="width:13px;height:13px;"></i> Copiar link
+          </button>
+        </div>
+      </div>
+
+      <!-- 2. CONSULTA TU PRÓXIMA CLASE -->
+      <div class="service-card fade-up d2">
+        <div class="card-icon">
+          <i data-lucide="calendar-search"></i>
+        </div>
+        <h3>Consulta aquí tu próxima clase</h3>
+        <p>Consulta horarios, aulas asignadas y docentes para cada módulo del semestre vigente.</p>
+        <p class="badge">Acceso con cuenta Gmail</p>
+        <a class="card-link"
+           href="https://script.google.com/a/macros/jdc.edu.co/s/AKfycbyJy6SEeoivtvY3VVN3xexL0swhSUjRyQrmesBnrJs6LZclnM3VBX0rCjYtdeyjA-CT3Q/exec"
+           target="_blank" rel="noopener noreferrer">
+          <i data-lucide="arrow-right" style="width:14px;height:14px;"></i> Acceder
+        </a>
+      </div>
+
+      <!-- 3. EVALUACIÓN DOCENTE -->
+      <div class="service-card fade-up d3">
+        <div class="card-icon">
+          <i data-lucide="clipboard-check"></i>
+        </div>
+        <h3>Evaluación Docente</h3>
+        <p>Participa en la evaluación docente finalizando tu asignatura. Su opinión fortalece la calidad académica.</p>
+        <p class="badge">Acceso con cuenta Gmail</p>
+        <a class="card-link"
+           href="https://forms.gle/LnhQ6iPuSJa4TAUq5"
+           target="_blank" rel="noopener noreferrer">
+          <i data-lucide="star" style="width:14px;height:14px;"></i> Evaluar
+        </a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- NOTICIAS Y EVENTOS -->
+<section id="noticias" class="section news-section">
+  <div class="section-inner">
+    <div class="section-header fade-up d1">
+      <div class="gold-bar"></div>
+      <h2>Noticias y Eventos</h2>
+      <p>Entérate de las últimas novedades del programa</p>
+    </div>
+
+    <div class="news-grid" id="news-grid">
+      <!-- Noticias de muestra -->
+      <div class="news-card fade-up d1">
+        <span class="news-tag tag-evento">Evento</span>
+        <h4>Sustentación de Trabajos de Grado – Cohorte 2024</h4>
+        <p>Los estudiantes de la cohorte 2024 presentarán sus trabajos de grado ante el comité evaluador. Jornada abierta al público académico.</p>
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <span class="news-date">15 de mayo, 2026 · 8:00 a.m.</span>
+        </div>
+      </div>
+      <div class="news-card fade-up d2">
+        <span class="news-tag tag-noticia">Noticia</span>
+        <h4>Apertura de inscripciones – Cohorte 2027-1</h4>
+        <p>Se encuentran abiertas las inscripciones para la próxima cohorte de la Maestría en Educación. Cupos limitados. Proceso 100% virtual.</p>
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <span class="news-date">1 de mayo, 2026</span>
+          <a href="https://www.jdc.edu.co" target="_blank" class="news-link">
+            Más info <i data-lucide="arrow-up-right" style="width:13px;height:13px;"></i>
+          </a>
+        </div>
+      </div>
+      <div class="news-card fade-up d3">
+        <span class="news-tag tag-aviso">Aviso</span>
+        <h4>Cambio de horario – Módulo Investigación Formativa</h4>
+        <p>Se informa a los estudiantes que la clase del sábado 17 de mayo será reprogramada para el sábado 24 de mayo en el mismo horario y aula.</p>
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <span class="news-date">10 de mayo, 2026</span>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+</section>
+
+<!-- DIRECTORIO DE CONTACTOS -->
+<section id="directorio" class="section" style="background: linear-gradient(180deg, var(--teal) 0%, var(--teal-dark) 100%);">
+  <div class="section-inner">
+    <div class="section-header fade-up d1">
+      <div class="gold-bar"></div>
+      <h2>Directorio de Contactos</h2>
+      <p>Comunícate directamente con las dependencias del programa</p>
+    </div>
+    <div class="dir-grid">
+
+      <div class="dir-card fade-up d1">
+        <div class="dir-icon"><i data-lucide="landmark"></i></div>
+        <div class="dept">Financiera</div>
+        <div class="name">Oficina Financiera JDC</div>
+        <a href="tel:+5787421964"><i data-lucide="phone" style="width:13px;height:13px;"></i> (8) 742-1964 Ext. 101</a>
+      </div>
+
+      <div class="dir-card fade-up d2">
+        <div class="dir-icon"><i data-lucide="file-text"></i></div>
+        <div class="dept">Registro y Control</div>
+        <div class="name">Registro y Control Académico</div>
+        <a href="tel:+5787421964"><i data-lucide="phone" style="width:13px;height:13px;"></i> (8) 742-1964 Ext. 120</a>
+      </div>
+
+      <div class="dir-card fade-up d3">
+        <div class="dir-icon"><i data-lucide="graduation-cap"></i></div>
+        <div class="dept">Dirección de Maestría</div>
+        <div class="name">Coordinación Maestría en Educación</div>
+        <a href="mailto:maestria.educacion@jdc.edu.co"><i data-lucide="mail" style="width:13px;height:13px;"></i> maestria.educacion@jdc.edu.co</a>
+      </div>
+
+      <div class="dir-card fade-up d4">
+        <div class="dir-icon"><i data-lucide="monitor"></i></div>
+        <div class="dept">Aulas Digitales</div>
+        <div class="name">Soporte Tecnológico y TIC</div>
+        <a href="tel:+5787421964"><i data-lucide="phone" style="width:13px;height:13px;"></i> (8) 742-1964 Ext. 145</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CONTACTO GENERAL -->
+<section id="contacto" class="section" style="background: var(--teal-dark);">
+  <div class="section-inner">
+    <div class="section-header fade-up d1">
+      <div class="gold-bar"></div>
+      <h2>Contacto y Soporte</h2>
+      <p>Estamos para apoyarte a través de nuestros canales oficiales</p>
+    </div>
+    <div class="contact-wrap fade-up d2">
+      <div class="contact-grid">
+        <div class="contact-item">
+          <div class="contact-icon"><i data-lucide="mail"></i></div>
+          <div>
+            <div class="label">Correo</div>
+            <a href="mailto:maestria.educacion@jdc.edu.co">maestria.educacion@jdc.edu.co</a>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon"><i data-lucide="phone"></i></div>
+          <div>
+            <div class="label">Teléfono</div>
+            <a href="tel:+573112749207">Llamar</a>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon"><i data-lucide="clock"></i></div>
+          <div>
+            <div class="label">Horario</div>
+            <span>Lun – Vie: 8:00 a.m. – 6:00 p.m.</span>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon"><i data-lucide="map-pin"></i></div>
+          <div>
+            <div class="label">Ubicación</div>
+            <span>Tunja, Boyacá – Colombia</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="ft">Fundación Universitaria Juan de Castellanos</div>
+  <div class="ft-sub">Maestría en Educación · Facultad de Ciencias de la Educación, Humanidades y Artes</div>
+  <div class="ft-copy">© 2026 Todos los derechos reservados</div>
+</footer>
+
+<script>
+  // ── Inicializar iconos Lucide ──
+  lucide.createIcons();
+</script>
+
+</body>
+</html>
