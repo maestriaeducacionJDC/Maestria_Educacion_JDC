@@ -29,7 +29,6 @@
       font-family: 'Playfair Display', Georgia, serif;
       color: #fff;
     }
-
     /* ── SCROLLBAR ── */
     ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-track { background: var(--teal-dark); }
@@ -77,7 +76,9 @@
     .hero-inner { position: relative; z-index: 2; max-width: 780px; margin: 0 auto; }
     .gold-bar { width: 56px; height: 3px; background: linear-gradient(90deg, var(--gold), rgba(240,192,96,0.3)); margin: 0 auto 1.5rem; border-radius: 2px; }
     .hero h1 { font-size: clamp(2.2rem, 5vw, 3.8rem); font-weight: 800; line-height: 1.15; margin-bottom: 0.75rem; letter-spacing: -0.5px; }
-    .hero .tagline { font-family: 'Playfair Display', serif; font-size: clamp(1rem, 2.5vw, 1.5rem); font-weight: 500; font-style: italic; letter-spacing: 0.08em; color: rgba(255,255,255,0.7); margin-bottom: 2.5rem; }
+    
+    .hero-img { width: 450px; height: auto; margin: 0 auto 2.5rem; display: block; border-radius: 20px; }
+
     .hero-buttons { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
 
     /* ── BUTTONS ── */
@@ -98,6 +99,23 @@
       box-shadow: 0 0 22px var(--gold-glow), 0 4px 16px rgba(0,0,0,0.25);
       background: #f5cc74;
     }
+
+    /* Estilo para que el texto de los avisos no se pierda */
+.carousel-item p {
+  font-size: 1.25rem;
+  color: rgba(255,255,255,0.9);
+  max-width: 600px;
+  margin: 0 auto 2rem;
+  line-height: 1.6;
+}
+
+/* Ajuste para que los botones de navegación no estorben en móvil */
+@media (max-width: 768px) {
+  .prev-btn, .next-btn {
+    padding: 0.5rem;
+    background: rgba(0,0,0,0.1);
+  }
+}
 
     .btn-outline {
       display: inline-flex; align-items: center; gap: 0.5rem;
@@ -223,8 +241,6 @@
     .news-card .news-link { font-size: 0.8rem; color: var(--teal-light); text-decoration: none; display: inline-flex; align-items: center; gap: 0.3rem; }
     .news-card .news-link:hover { color: var(--gold); }
 
-
-
     /* ── DIRECTORY ── */
     .dir-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; }
     .dir-card {
@@ -248,7 +264,7 @@
     .dir-card a { font-size: 0.82rem; color: var(--teal-light); text-decoration: none; display: flex; align-items: center; gap: 0.3rem; transition: color 0.2s; }
     .dir-card a:hover { color: var(--gold); }
 
-    /* ── CONTACT ── */
+    /* ── CONTACT (CORREGIDO) ── */
     .contact-wrap {
       background: rgba(255,255,255,0.05);
       border: 1px solid var(--card-border);
@@ -263,8 +279,16 @@
       border-radius: 50%;
       background: radial-gradient(circle, rgba(240,192,96,0.06), transparent 70%);
     }
-    .contact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; }
-    .contact-item { display: flex; align-items: flex-start; gap: 1rem; }
+
+    /* UN SOLO GRID PARA TODOS LOS ITEMS */
+    .contact-grid { 
+      display: flex; 
+      flex-direction: column; 
+      gap: 1.5rem; 
+      max-width: 500px; 
+      margin: 0 auto; 
+    }
+    .contact-item { display: flex; align-items: center; gap: 1.2rem; padding: 0.5rem; }
     .contact-icon {
       width: 42px; height: 42px; border-radius: 10px; flex-shrink: 0;
       display: flex; align-items: center; justify-content: center;
@@ -272,7 +296,12 @@
       border: 1px solid rgba(15,163,193,0.25);
     }
     .contact-icon svg { color: var(--teal-light) !important; width: 18px; height: 18px; }
-    .contact-item .label { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 0.25rem; }
+    
+    .contact-info { display: flex; flex-direction: column; }
+    .contact-info .label { 
+      font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; 
+      color: rgba(255,255,255,0.4); margin-bottom: 0.25rem; 
+    }
     .contact-item a, .contact-item span { font-size: 0.88rem; font-weight: 500; color: #fff; text-decoration: none; transition: color 0.2s; }
     .contact-item a:hover { color: var(--gold); }
 
@@ -299,10 +328,50 @@
     .d4 { animation-delay: 0.35s; }
 
     @media (max-width: 640px) {
-      .form-row { grid-template-columns: 1fr; }
       .contact-wrap { padding: 1.75rem; }
       nav .links { display: none; }
     }
+    .carousel-container {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  min-height: 500px; /* Ajusta según tu diseño */
+}
+
+.carousel-item {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  opacity: 0;
+  transition: opacity 0.8s ease-in-out;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  pointer-events: none; /* Evita clics en slides invisibles */
+}
+
+.carousel-item.active {
+  opacity: 1;
+  position: relative; /* El slide activo define la altura */
+  pointer-events: auto;
+}
+
+/* Estilo para los botones de navegación */
+.prev-btn, .next-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0,0,0,0.3);
+  color: white;
+  border: none;
+  padding: 1rem;
+  cursor: pointer;
+  z-index: 10;
+}
+.next-btn { right: 0; }
+.prev-btn { left: 0; }
   </style>
 </head>
 <body>
@@ -310,10 +379,11 @@
 <!-- NAV -->
 <nav>
   <div class="inner">
-    <img src="https://www.jdc.edu.co/images/Menu%20Principal/horizontal-fondo-oscuro.png"
-         alt="Universidad Juan de Castellanos"
+    <img src="https://www.jdc.edu.co/images/Menu%20Principal/Somos%20la%20juan.webp"
+         alt="Somos la Juan"
          style="height:48px; width:auto;"
          onerror="this.style.display='none'">
+         
     <div class="links">
       <a href="#servicios">Servicios</a>
       <a href="#noticias">Noticias</a>
@@ -325,18 +395,51 @@
 
 <!-- HERO -->
 <header class="hero">
-  <div class="hero-inner fade-up d1">
-    <div class="gold-bar"></div>
-    <h1>Maestría en Educación</h1>
-    <p class="tagline">SOMOS + SOMOS LA JUAN</p>
-    <div class="hero-buttons">
-      <a href="#servicios" class="btn-primary">
-        <i data-lucide="layout-grid" style="width:16px;height:16px;"></i> Explorar Servicios
-      </a>
-      <a href="#contacto" class="btn-outline">
-        <i data-lucide="mail" style="width:16px;height:16px;"></i> Contacto
-      </a>
+  <div class="carousel-container">
+    <div class="carousel-track">
+      
+      <!-- Slide 1: Maestría (Original) -->
+      <div class="carousel-item active">
+        <div class="hero-inner fade-up">
+          <div class="gold-bar"></div>
+          <h1>Maestría en Educación</h1>
+          <img src="banner.png" alt="Maestría Educación" class="hero-img">
+          <div class="hero-buttons">
+            <a href="#servicios" class="btn-primary"><i data-lucide="layout-grid"></i> Explorar Servicios</a>
+            <a href="#contacto" class="btn-outline"><i data-lucide="mail"></i> Contacto</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 2: Avisos -->
+      <div class="carousel-item">
+        <div class="hero-inner">
+          <div class="gold-bar"></div>
+          <h1>Avisos Importantes</h1>
+          <p>Inscripciones abiertas para el ciclo 2026. ¡No te quedes fuera!</p>
+          <div class="hero-buttons">
+            <a href="#inscripciones" class="btn-primary">Ver Requisitos</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 3: Noticias -->
+      <div class="carousel-item">
+        <div class="hero-inner">
+          <div class="gold-bar"></div>
+          <h1>Noticias Recientes</h1>
+          <p>Nuestra facultad ha sido reconocida internacionalmente por su innovación.</p>
+          <div class="hero-buttons">
+            <a href="#noticias" class="btn-primary">Leer más</a>
+          </div>
+        </div>
+      </div>
+
     </div>
+    
+    <!-- Controles (Opcional) -->
+    <button class="prev-btn">❮</button>
+    <button class="next-btn">❯</button>
   </div>
 </header>
 
@@ -350,7 +453,6 @@
     </div>
     <div class="cards-grid">
 
-      <!-- 1. CRONOGRAMA ACADÉMICO -->
       <div class="service-card fade-up d1">
         <div class="card-icon">
           <i data-lucide="calendar-days"></i>
@@ -373,7 +475,6 @@
         </div>
       </div>
 
-      <!-- 2. CONSULTA TU PRÓXIMA CLASE -->
       <div class="service-card fade-up d2">
         <div class="card-icon">
           <i data-lucide="calendar-search"></i>
@@ -388,7 +489,6 @@
         </a>
       </div>
 
-      <!-- 3. EVALUACIÓN DOCENTE -->
       <div class="service-card fade-up d3">
         <div class="card-icon">
           <i data-lucide="clipboard-check"></i>
@@ -417,22 +517,21 @@
     </div>
 
     <div class="news-grid" id="news-grid">
-      <!-- Noticias de muestra -->
       <div class="news-card fade-up d1">
         <span class="news-tag tag-evento">Evento</span>
-        <h4>Sustentación de Trabajos de Grado – Cohorte 2026</h4>
-        <p>Los estudiantes de la cohorte 2026 presentarán sus trabajos de grado ante el comité evaluador. Jornada abierta al público académico.</p>
+        <h4>Sustentación de Trabajos de Grado – Cohorte 2024</h4>
+        <p>Los estudiantes de la cohorte 2024 presentarán sus trabajos de grado ante el comité evaluador. Jornada abierta al público académico.</p>
         <div style="display:flex; justify-content:space-between; align-items:center;">
           <span class="news-date">15 de mayo, 2026 · 8:00 a.m.</span>
         </div>
       </div>
       <div class="news-card fade-up d2">
         <span class="news-tag tag-noticia">Noticia</span>
-        <h4>Apertura de inscripciones – Cohorte 2027-1</h4>
+        <h4>Apertura de inscripciones – Cohorte 2026-2</h4>
         <p>Se encuentran abiertas las inscripciones para la próxima cohorte de la Maestría en Educación. Cupos limitados. Proceso 100% virtual.</p>
         <div style="display:flex; justify-content:space-between; align-items:center;">
-          <span class="news-date">1 de mayo, 2026</span>
-          <a href="https://www.jdc.edu.co" target="_blank" class="news-link">
+          <span class="news-date">19 de Junio, 2026</span>
+          <a href="https://www.jdc.edu.co/maestria/educacion" target="_blank" class="news-link">
             Más info <i data-lucide="arrow-up-right" style="width:13px;height:13px;"></i>
           </a>
         </div>
@@ -446,8 +545,6 @@
         </div>
       </div>
     </div>
-
-
   </div>
 </section>
 
@@ -465,20 +562,27 @@
         <div class="dir-icon"><i data-lucide="landmark"></i></div>
         <div class="dept">Financiera</div>
         <div class="name">Oficina Financiera JDC</div>
-        <a href="tel:+3175050442"><i data-lucide="phone" style="width:13px;height:13px;"></i>PBX 6087458676 Ext. 1104 - 1106</a>
+        <a href="tel:+573175050442"><i data-lucide="phone" style="width:13px;height:13px;"></i>Llamada: 3175050442</a>
+        <a href="tel:+576087458676"><i data-lucide="phone-call" style="width:13px;height:13px;"></i>PBX 6087458676 Ext. 1104 - 1106</a>
+        <a href="mailto:credito.cartera@jdc.edu.co"><i data-lucide="mail" style="width:13px;height:13px;"></i> credito.cartera@jdc.edu.co</a>
+        <a href="mailto:cartera@jdc.edu.co"><i data-lucide="mail" style="width:13px;height:13px;"></i> cartera@jdc.edu.co</a>
       </div>
 
       <div class="dir-card fade-up d2">
         <div class="dir-icon"><i data-lucide="file-text"></i></div>
         <div class="dept">Registro y Control</div>
         <div class="name">Registro y Control Académico</div>
-        <a href="tel:+573112237781"><i data-lucide="phone" style="width:13px;height:13px;"></i> PBX 6087458676 Ext. 1123 - 1124</a>
+        <a href="tel:+573112237781"><i data-lucide="phone" style="width:13px;height:13px;"></i>Llamada: 3112237781</a>
+        <a href="tel:+576087458676"><i data-lucide="phone-call" style="width:13px;height:13px;"></i> PBX 6087458676 / Ext. 1123 - 1124</a>
+        <a href="mailto:registro.control@jdc.edu.co"><i data-lucide="mail" style="width:13px;height:13px;"></i> registro.control@jdc.edu.co</a>
       </div>
 
       <div class="dir-card fade-up d3">
         <div class="dir-icon"><i data-lucide="graduation-cap"></i></div>
         <div class="dept">Dirección de Maestría</div>
         <div class="name">Coordinación Maestría en Educación</div>
+        <a href="tel:+573112749207"><i data-lucide="phone" style="width:13px;height:13px;"></i>Llamada: 3112749207</a>
+        <a href="https://wa.me/+573112749207"><i data-lucide="message-circle" style="width:13px;height:13px;"></i>Whatsapp: 3112749207</a>
         <a href="mailto:maestria.educacion@jdc.edu.co"><i data-lucide="mail" style="width:13px;height:13px;"></i> maestria.educacion@jdc.edu.co</a>
       </div>
 
@@ -488,50 +592,65 @@
         <div class="name">Soporte Tecnológico y TIC</div>
         <a href="tel:+573107392522"><i data-lucide="phone" style="width:13px;height:13px;"></i>Llamada: 3107392522</a>
         <a href="https://wa.me/+573107392522"><i data-lucide="message-circle" style="width:13px;height:13px;"></i>Whatsapp: 3107392522</a>
+         <a href="mailto:aulas.digitales@jdc.edu.co"><i data-lucide="mail" style="width:13px;height:13px;"></i> aulas.digitales@jdc.edu.co</a>
       </div>
-
     </div>
   </div>
 </section>
 
-<!-- CONTACTO GENERAL -->
+<!-- CONTACTO GENERAL (SECCIÓN CORREGIDA) -->
 <section id="contacto" class="section" style="background: var(--teal-dark);">
   <div class="section-inner">
     <div class="section-header fade-up d1">
       <div class="gold-bar"></div>
-      <h2>Contacto y Soporte</h2>
+      <h2>Canal Oficial Direccion Maestria</h2>
       <p>Estamos para apoyarte a través de nuestros canales oficiales</p>
     </div>
+    
     <div class="contact-wrap fade-up d2">
+      <!-- Un solo contenedor para evitar el desorden -->
       <div class="contact-grid">
+        
         <div class="contact-item">
           <div class="contact-icon"><i data-lucide="mail"></i></div>
-          <div>
+          <div class="contact-info">
             <div class="label">Correo</div>
             <a href="mailto:maestria.educacion@jdc.edu.co">maestria.educacion@jdc.edu.co</a>
           </div>
         </div>
+
         <div class="contact-item">
           <div class="contact-icon"><i data-lucide="phone"></i></div>
-          <div>
+          <div class="contact-info">
             <div class="label">Teléfono</div>
-            <a href="tel:+573112749207">Llamar</a>
+            <a href="tel:+573112749207">Llamar: 3112749207</a>
           </div>
         </div>
+
+        <div class="contact-item">
+          <div class="contact-icon"><i data-lucide="message-circle"></i></div>
+          <div class="contact-info">
+            <div class="label">Whatsapp</div>
+            <a href="https://wa.me/+573112749207" target="_blank">Enviar Mensaje</a>
+          </div>
+        </div>
+
         <div class="contact-item">
           <div class="contact-icon"><i data-lucide="clock"></i></div>
-          <div>
+          <div class="contact-info">
             <div class="label">Horario</div>
-            <span>Lun – Vie: 8:00 a.m. – 6:00 p.m.</span>
+            <span>Lunes – Viernes: 8:00 a.m. - 12:00 p.m / 2:00 p.m - 6:00 p.m.</span>
           </div>
         </div>
+
         <div class="contact-item">
           <div class="contact-icon"><i data-lucide="map-pin"></i></div>
-          <div>
+          <div class="contact-info">
             <div class="label">Ubicación</div>
             <span>Tunja, Boyacá – Colombia</span>
           </div>
         </div>
+
       </div>
     </div>
   </div>
@@ -545,9 +664,64 @@
 </footer>
 
 <script>
-  // ── Inicializar iconos Lucide ──
   lucide.createIcons();
 </script>
+<script>
+  // Inicializar iconos de Lucide al cargar
+  lucide.createIcons();
 
+  // --- LÓGICA DEL CARRUSEL ---
+  const slides = document.querySelectorAll('.carousel-item');
+  const nextBtn = document.querySelector('.next-btn');
+  const prevBtn = document.querySelector('.prev-btn');
+  let currentIndex = 0;
+  const intervalTime = 2000; // Cambio automático cada 5 segundos
+
+  function showSlide(index) {
+    // 1. Quitar clase activa de todos los slides
+    slides.forEach((slide) => {
+      slide.classList.remove('active');
+      // Opcional: remover animaciones para que se reinicien al volver
+      const inner = slide.querySelector('.hero-inner');
+      if (inner) inner.classList.remove('fade-up');
+    });
+
+    // 2. Activar el slide actual
+    slides[index].classList.add('active');
+    
+    // 3. Reiniciar animación fade-up y volver a renderizar iconos
+    const activeInner = slides[index].querySelector('.hero-inner');
+    if (activeInner) {
+      // Un pequeño timeout para que el navegador note el cambio de clase y reinicie la animación
+      setTimeout(() => {
+        activeInner.classList.add('fade-up');
+        lucide.createIcons(); 
+      }, 10);
+    }
+  }
+
+  function nextSlide() {
+    currentIndex = (currentIndex + 1) % slides.length;
+    showSlide(currentIndex);
+  }
+
+  function prevSlide() {
+    currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+    showSlide(currentIndex);
+  }
+
+  // Eventos de los botones
+  if (nextBtn) nextBtn.addEventListener('click', nextSlide);
+  if (prevBtn) prevBtn.addEventListener('click', prevSlide);
+
+  // Cambio automático
+  let slideInterval = setInterval(nextSlide, intervalTime);
+
+  // Pausar el auto-play si el usuario pasa el mouse por encima
+  const container = document.querySelector('.carousel-container');
+  container.addEventListener('mouseenter', () => clearInterval(slideInterval));
+  container.addEventListener('mouseleave', () => slideInterval = setInterval(nextSlide, intervalTime));
+
+</script>
 </body>
 </html>
