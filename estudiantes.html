@@ -137,7 +137,6 @@
 </div>
 
 <script>
-  // ── FIX 1: key correcta (legacy anon JWT) ────────────────────────────────
   const SUPABASE_URL = 'https://ryfcvlhjfgwbopqsfths.supabase.co';
   const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ5ZmN2bGhqZmd3Ym9wcXNmdGhzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg3OTI1MjUsImV4cCI6MjA5NDM2ODUyNX0.ccbpceCZeUYBRz9EaEWLGSh_ZqcqgHOqlLMO1AnSplc';
 
@@ -150,16 +149,17 @@
   async function loadStats() {
     try {
       const res = await fetch(
-        `${SUPABASE_URL}/rest/v1/estudiantes?select=estado_matricula,cohortes(codigo)&limit=1000`,
-        { headers: HEADERS }
+        `${SUPABASE_URL}/rest/v1/rpc/get_stats_publicos`,
+        {
+          method: 'POST',
+          headers: { ...HEADERS, 'Content-Type': 'application/json' },
+          body: JSON.stringify({})
+        }
       );
       const data = await res.json();
-      // FIX 2: comparación en minúsculas (así se guardaron en el seed)
-      const activos  = data.filter(s => s.estado_matricula?.toLowerCase() === 'activo').length;
-      const cohortes = new Set(data.map(s => s.cohortes?.codigo).filter(Boolean)).size;
-      document.getElementById('st-total').textContent    = data.length;
-      document.getElementById('st-activos').textContent  = activos;
-      document.getElementById('st-cohortes').textContent = cohortes;
+      document.getElementById('st-total').textContent    = data.total    || 0;
+      document.getElementById('st-activos').textContent  = data.activos  || 0;
+      document.getElementById('st-cohortes').textContent = data.cohortes || 0;
     } catch(e) { console.error('Stats error:', e); }
   }
   loadStats();
@@ -174,10 +174,13 @@
     btn.disabled = true;
 
     try {
-      // FIX 3: zonas(nombre_zona) en lugar de zonas(nombre)
       const res = await fetch(
-        `${SUPABASE_URL}/rest/v1/estudiantes?numero_documento=eq.${encodeURIComponent(cedula)}&select=*,cohortes(codigo),zonas(nombre_zona)&limit=1`,
-        { headers: HEADERS }
+        `${SUPABASE_URL}/rest/v1/rpc/buscar_estudiante_por_documento`,
+        {
+          method: 'POST',
+          headers: { ...HEADERS, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ p_documento: cedula })
+        }
       );
       const data = await res.json();
       mostrar(data[0] || null, cedula);
@@ -205,11 +208,11 @@
 
     const ini = ((est.nombres||'')[0]||'') + ((est.apellidos||'')[0]||'');
     const esActivo = est.estado_matricula?.toLowerCase() === 'activo';
-    // FIX 4: leer nombre_zona en lugar de nombre
-    const zonaNombre = est.zonas?.nombre_zona || '—';
+    const zonaNombre  = est.zona_nombre  || '—';
+    const cohorteCod  = est.cohorte_codigo || '—';
 
-    const inglесOk = est.ingles && est.ingles.toLowerCase() !== 'pendiente';
-    const ponenciaOk = est.ponencia_sustentacion && est.ponencia_sustentacion.toLowerCase() !== 'pendiente';
+    const inglesOk    = est.ingles && est.ingles.toLowerCase() !== 'pendiente';
+    const ponenciaOk  = est.ponencia_sustentacion && est.ponencia_sustentacion.toLowerCase() !== 'pendiente';
 
     let html = `
       <div class="perfil">
@@ -228,7 +231,7 @@
       <div class="datos-grid">
         <div class="dato">
           <div class="dato-label"><i class="fas fa-users me-1"></i>Cohorte</div>
-          <div class="dato-value">${esc(est.cohortes?.codigo) || '—'}</div>
+          <div class="dato-value">${esc(cohorteCod)}</div>
         </div>
         <div class="dato">
           <div class="dato-label"><i class="fas fa-map-marker-alt me-1"></i>Zona</div>
@@ -248,7 +251,7 @@
         </div>
         <div class="dato">
           <div class="dato-label"><i class="fas fa-graduation-cap me-1"></i>Homologación</div>
-          <div class="dato-value" style="font-size:.82rem">${esc(est.homologacion) || '—'}</div>
+          <div class="dato-value">${esc(est.homologacion) || '—'}</div>
         </div>
         ${est.correo_institucional ? `
         <div class="dato full">
@@ -261,7 +264,7 @@
       <div class="req-item">
         <i class="fas fa-language" style="color:var(--jdc-teal);width:18px;text-align:center"></i>
         <span class="req-label">Inglés</span>
-        <span class="req-val ${inglесOk ? 'req-ok' : 'req-pend'}">${esc(est.ingles) || 'Pendiente'}</span>
+        <span class="req-val ${inglesOk ? 'req-ok' : 'req-pend'}">${esc(est.ingles) || 'Pendiente'}</span>
       </div>
       <div class="req-item">
         <i class="fas fa-file-alt" style="color:var(--jdc-teal);width:18px;text-align:center"></i>
